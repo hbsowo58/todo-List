@@ -56,8 +56,8 @@ const addTodo = (content) => {
       content,
       completed: false,
     },
-    (todo) => {
-      todos = todo;
+    (_todo) => {
+      todos = _todo;
       render();
     }
   );
