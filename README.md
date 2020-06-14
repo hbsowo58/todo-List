@@ -1,4 +1,4 @@
-# Vanila javascirpt todo list
+# Vanilla javascript todo list
 
 <br>
 v1 추가, 삭제 기능 구현
@@ -21,4 +21,5 @@ v6 fetch 서버통신 구현
 <br>
 v7 axios 서버통신 구현
 <br>
+v8 async await (axios, fetch, promise)
 <br>
