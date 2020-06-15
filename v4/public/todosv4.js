@@ -1,6 +1,4 @@
-import {
-  ajax
-} from './ajax.js'
+import { ajax } from "./ajax.js";
 let todos = [];
 
 const $todos = document.querySelector(".todos");
@@ -14,11 +12,11 @@ let navState = "all";
 
 const getTodos = () => {
   todos = [];
-  ajax.get('todos/', (_todos) => {
+  ajax.get("todos/", (_todos) => {
     todos = _todos;
     render();
   });
-}
+};
 
 const render = () => {
   const _todos = todos.filter((todo) => {
@@ -28,11 +26,7 @@ const render = () => {
   });
   let html = "";
 
-  _todos.forEach(({
-    id,
-    content,
-    completed
-  }) => {
+  _todos.forEach(({ id, content, completed }) => {
     html += `<li id="${id}" class="todo-item">
     <input class="custom-checkbox" type="checkbox" id="ck-${id}" ${
       completed ? "checked" : ""
@@ -44,7 +38,9 @@ const render = () => {
 
   $completedTodos.textContent = todos.filter((todo) => todo.completed).length;
   $activeTodos.textContent = todos.filter((todo) => !todo.completed).length;
-  $ckAll.checked = checkCkall();
+  $ckAll.checked = todos.length
+    ? todos.filter((todo) => todo.completed).length === todos.length
+    : false;
   $todos.innerHTML = html;
 };
 
@@ -53,51 +49,58 @@ const generateId = () => {
 };
 
 const addTodo = (content) => {
-  ajax.post('todos/', {
-    id: generateId(),
-    content,
-    completed: false
-  }, todo => {
-    todos = todo
-    render();
-  });
+  ajax.post(
+    "todos/",
+    {
+      id: generateId(),
+      content,
+      completed: false,
+    },
+    (_todo) => {
+      todos = _todo;
+      render();
+    }
+  );
 };
 
 const removeTodo = (id) => {
-  ajax.delete(`todos/${id}`, _todos => {
+  ajax.delete(`todos/${id}`, (_todos) => {
     todos = _todos;
     render();
-  })
+  });
 };
 
 const toggleTodo = (id) => {
-  ajax.patch(`todos/${id}`, {
-    completed
-  }, _todos => {
-    todos = _todos;
-    render();
-  })
+  ajax.patch(
+    `todos/${id}`,
+    {
+      completed,
+    },
+    (_todos) => {
+      todos = _todos;
+      render();
+    }
+  );
 };
 
 const completeAll = (completed) => {
-  ajax.patch('todos/', {
-    completed
-  }, _todos => {
-    todos = _todos
-    render();
-  });
+  ajax.patch(
+    "todos/",
+    {
+      completed,
+    },
+    (_todos) => {
+      todos = _todos;
+      render();
+    }
+  );
 };
 const clearCompleted = () => {
-  ajax.delete('todos/completed', _todos => {
-    todos = _todos
+  ajax.delete("todos/completed", (_todos) => {
+    todos = _todos;
     render();
   });
 };
-
-const checkCkall = () => {
-  const btnCheck = todos.filter((todo) => todo.completed === true);
-  return btnCheck.length === todos.length;
-}
 
 $inputTodo.onkeyup = (e) => {
   const content = $inputTodo.value.trim();
@@ -107,10 +110,8 @@ $inputTodo.onkeyup = (e) => {
 };
 
 $todos.onclick = (e) => {
-  // if (!e.target.classList.contains("remove-todo")) return;
   if (!e.target.matches(".remove-todo")) return;
   removeTodo(e.target.parentNode.id);
-  // render();
 };
 
 $todos.onchange = (e) => {
@@ -125,9 +126,7 @@ $clearCompleted.onclick = () => {
   clearCompleted();
 };
 
-$nav.addEventListener("click", ({
-  target
-}) => {
+$nav.addEventListener("click", ({ target }) => {
   if (!target.matches(".nav > li")) return;
   const $active = $nav.querySelector(".active");
 

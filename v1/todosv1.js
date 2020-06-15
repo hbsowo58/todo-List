@@ -15,8 +15,7 @@ const getTodos = () => {
       id: 3,
       content: "Javascript",
     },
-  ];
-  todos = todos.sort((todo1, todo2) => todo1.id - todo2.id);
+  ].todos.sort((todo1, todo2) => todo1.id - todo2.id);
   render();
 };
 
