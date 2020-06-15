@@ -11,3 +11,11 @@ v3 네비게이션 기능 구현
 <br>
 <br>
 v4 ajax 서버통신 구현
+<br>
+<br>
+v5 promise 서버통신 구현
+<br>
+<br>
+v6 fetch 서버통신 구현
+<br>
+<br>
