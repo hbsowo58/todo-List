@@ -1,4 +1,4 @@
-export const ajax = (() => {
+const ajax = (() => {
   const req = (method, url, callback, payLoad) => {
     const xhr = new XMLHttpRequest();
     xhr.open(method, url);
@@ -27,3 +27,5 @@ export const ajax = (() => {
     },
   };
 })();
+
+export default ajax;
