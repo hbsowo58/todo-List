@@ -48,9 +48,8 @@ const render = () => {
   $todos.innerHTML = html;
 };
 
-const generateId = () => {
-  return todos.length ? Math.max(...todos.map((todo) => todo.id)) + 1 : 1;
-};
+const generateId = () =>
+  todos.length ? Math.max(...todos.map((todo) => todo.id)) + 1 : 1;
 
 const addTodo = async (content) => {
   const payload = { id: generateId(), content, completed: false };
