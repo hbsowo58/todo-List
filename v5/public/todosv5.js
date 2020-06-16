@@ -1,6 +1,10 @@
 import { promise } from "./promise.js";
-let todos = [];
 
+//global state
+let todos = [];
+let navState = "all";
+
+//DOM Controller
 const $todos = document.querySelector(".todos");
 const $inputTodo = document.querySelector(".input-todo");
 const $ckAll = document.querySelector("#ck-complete-all");
@@ -8,8 +12,8 @@ const $completedTodos = document.querySelector(".completed-todos");
 const $activeTodos = document.querySelector(".active-todos");
 const $clearCompleted = document.querySelector(".clear-completed > .btn");
 const $nav = document.querySelector(".nav");
-let navState = "all";
 
+//function
 const getTodos = () => {
   promise
     .get("todos/")
@@ -87,6 +91,7 @@ const clearCompleted = () => {
     .catch((err) => console.error(err));
 };
 
+//event binding
 $inputTodo.onkeyup = (e) => {
   const content = $inputTodo.value.trim();
   if (content === "" || e.keyCode !== 13) return;
