@@ -42,7 +42,9 @@ const render = () => {
 
   $completedTodos.textContent = todos.filter((todo) => todo.completed).length;
   $activeTodos.textContent = todos.filter((todo) => !todo.completed).length;
-  $ckAll.checked = checkCkall();
+  $ckAll.checked = todos.length
+    ? todos.filter((todo) => todo.completed).length === todos.length
+    : false;
   $todos.innerHTML = html;
 };
 
@@ -58,8 +60,8 @@ const addTodo = (content) => {
       content,
       completed: false,
     },
-    (todo) => {
-      todos = todo;
+    (_todo) => {
+      todos = _todo;
       render();
     }
   );
@@ -103,6 +105,7 @@ const clearCompleted = () => {
     render();
   });
 };
+
 
 const checkCkall = () => {
   const btnCheck = todos.filter((todo) => todo.completed === true);
