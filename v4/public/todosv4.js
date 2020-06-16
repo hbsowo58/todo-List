@@ -106,7 +106,6 @@ const clearCompleted = () => {
   });
 };
 
-
 const checkCkall = () => {
   const btnCheck = todos.filter((todo) => todo.completed === true);
   return btnCheck.length === todos.length;
