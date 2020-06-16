@@ -1,5 +1,3 @@
-import ajax from "./ajax.js";
-
 //global state
 let todos = [];
 let navState = "all";
@@ -14,12 +12,14 @@ const $clearCompleted = document.querySelector(".clear-completed > .btn");
 const $nav = document.querySelector(".nav");
 
 //function
-const getTodos = () => {
-  todos = [];
-  ajax.get("todos/", (_todos) => {
-    todos = _todos;
+const getTodos = async () => {
+  try {
+    const response = await axios.get("todos/"); // response.data;
+    todos = response.data;
     render();
-  });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const render = () => {
@@ -48,68 +48,57 @@ const render = () => {
   $todos.innerHTML = html;
 };
 
-const generateId = () => {
-  return todos.length ? Math.max(...todos.map((todo) => todo.id)) + 1 : 1;
-};
+const generateId = () =>
+  todos.length ? Math.max(...todos.map((todo) => todo.id)) + 1 : 1;
 
-const addTodo = (content) => {
-  ajax.post(
-    "todos/",
-    {
-      id: generateId(),
-      content,
-      completed: false,
-    },
-    (_todo) => {
-      todos = _todo;
-      render();
-    }
-  );
-};
-
-const removeTodo = (id) => {
-  ajax.delete(`todos/${id}`, (_todos) => {
-    todos = _todos;
+const addTodo = async (content) => {
+  const payload = { id: generateId(), content, completed: false };
+  try {
+    const response = await axios.post("todos/", payload);
+    todos = response.data;
     render();
-  });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-const toggleTodo = (id) => {
-  ajax.patch(
-    `todos/${id}`,
-    {
-      completed,
-    },
-    (_todos) => {
-      todos = _todos;
-      render();
-    }
-  );
-};
-
-const completeAll = (completed) => {
-  ajax.patch(
-    "todos/",
-    {
-      completed,
-    },
-    (_todos) => {
-      todos = _todos;
-      render();
-    }
-  );
-};
-const clearCompleted = () => {
-  ajax.delete("todos/completed", (_todos) => {
-    todos = _todos;
+const removeTodo = async (id) => {
+  try {
+    const response = await axios.delete(`todos/${id}`);
+    todos = response.data;
     render();
-  });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
+const toggleTodo = async (id) => {
+  try {
+    const response = await axios.patch(`todos/${id}`, { completed });
+    todos = response.data;
+    render();
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-const checkCkall = () => {
-  const btnCheck = todos.filter((todo) => todo.completed === true);
-  return btnCheck.length === todos.length;
+const completeAll = async (completed) => {
+  try {
+    const response = await axios.patch("todos/", { completed });
+    todos = response.data;
+    render();
+  } catch (error) {
+    console.log(error);
+  }
+};
+const clearCompleted = async () => {
+  try {
+    const response = await axios.delete("todos/completed");
+    todos = response.data;
+    render();
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 //event binding
@@ -121,7 +110,6 @@ $inputTodo.onkeyup = (e) => {
 };
 
 $todos.onclick = (e) => {
-  // if (!e.target.classList.contains("remove-todo")) return; 같은작업이나 matches가 더 대중적이라고 들음
   if (!e.target.matches(".remove-todo")) return;
   removeTodo(e.target.parentNode.id);
 };

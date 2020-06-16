@@ -1,5 +1,3 @@
-import ajax from "./ajax.js";
-
 //global state
 let todos = [];
 let navState = "all";
@@ -15,11 +13,13 @@ const $nav = document.querySelector(".nav");
 
 //function
 const getTodos = () => {
-  todos = [];
-  ajax.get("todos/", (_todos) => {
-    todos = _todos;
-    render();
-  });
+  axios
+    .get("todos/")
+    .then((response) => {
+      todos = response.data;
+    })
+    .catch((error) => console.log(error))
+    .then(render);
 };
 
 const render = () => {
@@ -53,63 +53,53 @@ const generateId = () => {
 };
 
 const addTodo = (content) => {
-  ajax.post(
-    "todos/",
-    {
-      id: generateId(),
-      content,
-      completed: false,
-    },
-    (_todo) => {
-      todos = _todo;
-      render();
-    }
-  );
+  const payload = { id: generateId(), content, completed: false };
+  axios
+    .post("todos/", payload)
+    .then((response) => {
+      todos = response.data;
+    })
+    .catch((error) => console.log(error))
+    .then(render);
 };
 
 const removeTodo = (id) => {
-  ajax.delete(`todos/${id}`, (_todos) => {
-    todos = _todos;
-    render();
-  });
+  axios
+    .delete(`todos/${id}`)
+    .then((response) => {
+      todos = response.data;
+    })
+    .catch((error) => console.log(error))
+    .then(render);
 };
 
 const toggleTodo = (id) => {
-  ajax.patch(
-    `todos/${id}`,
-    {
-      completed,
-    },
-    (_todos) => {
-      todos = _todos;
-      render();
-    }
-  );
+  axios
+    .patch(`todos/${id}`, { completed })
+    .then((response) => {
+      todos = response.data;
+    })
+    .catch((error) => console.log(error))
+    .then(render);
 };
 
 const completeAll = (completed) => {
-  ajax.patch(
-    "todos/",
-    {
-      completed,
-    },
-    (_todos) => {
-      todos = _todos;
-      render();
-    }
-  );
+  axios
+    .patch("todos/", { completed })
+    .then((response) => {
+      todos = response.data;
+    })
+    .catch((error) => console.log(error))
+    .then(render);
 };
 const clearCompleted = () => {
-  ajax.delete("todos/completed", (_todos) => {
-    todos = _todos;
-    render();
-  });
-};
-
-
-const checkCkall = () => {
-  const btnCheck = todos.filter((todo) => todo.completed === true);
-  return btnCheck.length === todos.length;
+  axios
+    .delete("todos/completed")
+    .then((response) => {
+      todos = response.data;
+    })
+    .catch((error) => console.log(error))
+    .then(render);
 };
 
 //event binding
@@ -121,7 +111,6 @@ $inputTodo.onkeyup = (e) => {
 };
 
 $todos.onclick = (e) => {
-  // if (!e.target.classList.contains("remove-todo")) return; 같은작업이나 matches가 더 대중적이라고 들음
   if (!e.target.matches(".remove-todo")) return;
   removeTodo(e.target.parentNode.id);
 };
