@@ -1,5 +1,4 @@
 <img width="1277" alt="v1" src="https://user-images.githubusercontent.com/48181483/85524464-28b16580-b643-11ea-9c5f-d86b60c6f8cd.png">
-<br>
 UI 구성
 <br>
 TodoTemplate : 화면 가운데 정렬 일정 관리 view
